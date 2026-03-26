@@ -1,16 +1,20 @@
 from scraper import buscar_dados
 from database import criar_banco, salvar_dados, listar_dados
-from database import salvar_dados
+
 
 criar_banco()
 
 dados = buscar_dados()
-salvar_dados(dados["titulo_principal"], dados["titulo_pagina"])
+salvar_dados(dados["titulo_produto"], dados["preco"])
 
-print(dados["titulo_principal"])
-print(dados["titulo_pagina"])
+print(dados["titulo_produto"])
+print(dados["preco"])
 
 registros = listar_dados()
 
 for registro in registros:
-    print(registro)
+    print(f"ID: {registro[0]}")
+    print(f"Título do produto: {registro[1]}")
+    print(f"Preço: {registro[2]}")
+    print(f"Data da coleta: {registro[3]}")
+    print("-" * 30)

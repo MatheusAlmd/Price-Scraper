@@ -2,13 +2,16 @@ import requests
 from bs4 import BeautifulSoup
 
 def buscar_dados():
-    resposta = requests.get("https://cursos.alura.com.br/dashboard")
+    resposta = requests.get("https://books.toscrape.com/catalogue/tipping-the-velvet_999/index.html")
+    resposta.encoding = "utf-8"
     soup = BeautifulSoup(resposta.text, "html.parser")
+    
 
-    titulo_principal = soup.h1.text.strip()
-    titulo_pagina = soup.title.text.strip()
+    titulo_produto = soup.h1.text.strip()
+    preco = soup.find("p", class_="price_color").text.strip().replace("£", "")
+    
 
     return {
-        "titulo_principal": titulo_principal,
-        "titulo_pagina": titulo_pagina
+        "titulo_produto": titulo_produto,
+        "preco": preco
     }
