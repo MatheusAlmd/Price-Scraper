@@ -2,35 +2,37 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def buscar_dados():
+def buscar_dados(url):
     try:
-        # Faz a requisição para a página do produto
-        resposta = requests.get("https://books.toscrape.com/catalogue/tipping-the-velvet_999/index.html")
+        # Faz a requisição para a URL que vier da interface
+        resposta = requests.get(url)
 
-        # Ajusta a codificação para os caracteres virem corretamente
+        # Ajusta os caracteres para não vir símbolo quebrado
         resposta.encoding = "utf-8"
 
         # Lê o HTML da página
         soup = BeautifulSoup(resposta.text, "html.parser")
 
-        # Captura o título do produto
+        # Pega o título do produto
         titulo_produto = soup.h1.text.strip()
 
-        # Captura o preço, remove o simbolo e converte para numero
-        preco = float(soup.find("p", class_="price_color").text.strip().replace("£", ""))
+        # Pega o preço, remove o símbolo £ e transforma em número
+        preco = float(
+            soup.find("p", class_="price_color").text.strip().replace("£", "")
+        )
 
-        # Se algum dado importate vier vazio, interrompe
+        # Se algum dos dados vier vazio, já interrompe
         if not titulo_produto or not preco:
             print("Título ou preço não foram encontrados corretamente.")
             return None
 
-        # Retorna os dados organizados
+        # Devolve os dados organizados
         return {
             "titulo_produto": titulo_produto,
             "preco": preco
         }
 
     except Exception as erro:
-        # Mostra o erro caso algo falhe
+        # Se der erro, mostra no terminal e retorna vazio
         print(f"Erro ao buscar dados: {erro}")
         return None
